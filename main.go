@@ -20,44 +20,17 @@ func main() {
 	fmt.Println("Successfully connected!")
 
 	db.AutoMigrate(&book.Book{})
-	////CRUD
-	//book := book.Book{}
-	//book.Title = "The Science Of Getting Rich"
-	//book.Price = 50
-	//book.Discount = 10
-	//book.Rating = 5
-	//book.Description = "A book of self mastery"
-	//
-	//err = db.Create(&book).Error
-	//if err != nil {
-	//	fmt.Println("==========================")
-	//	fmt.Println("Error creating book record")
-	//	fmt.Println("==========================")
-	//}
-	var book book.Book
 
-	err = db.Debug().Where("id = ?", 1).First(&book).Error
-	if err != nil {
-		fmt.Println("==========================")
-		fmt.Println("Error finding book record")
-		fmt.Println("==========================")
+	bookRepository := book.NewRepository(db)
+	bookService := book.NewService(bookRepository)
+
+	bookRequest := book.BookRequest{
+		Title: "The 50th Law",
+		Price: "50",
 	}
-	err = db.Delete(&book).Error
-	if err != nil {
-		fmt.Println("==========================")
-		fmt.Println("Error deleting book record")
-		fmt.Println("==========================")
-	}
-	// ============
-	// update data
-	// ============
-	//book.Title = "Richest Man In Babylon(revised edition)"
-	//err = db.Save(&book).Error
-	//if err != nil {
-	//	fmt.Println("==========================")
-	//	fmt.Println("Error updating book record")
-	//	fmt.Println("==========================")
-	//}
+
+	bookService.Create(bookRequest)
+
 	router := gin.Default()
 
 	v1 := router.Group("/v1")
@@ -70,3 +43,10 @@ func main() {
 
 	router.Run(":3000")
 }
+
+//main
+//handler
+//service
+//repository
+//db
+//postgresSQL
