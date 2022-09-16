@@ -17,33 +17,19 @@ type bookHandler struct {
 func NewBookHandler(bookService book.Service) *bookHandler {
 	return &bookHandler{bookService}
 }
+func (h *bookHandler) GetBooks(c *gin.Context) {
+	books, err := h.bookService.FindAll()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": err,
+		})
+		return
+	}
 
-func (h *bookHandler) RootHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
-		"name": "Sherwin Felton",
-		"bio":  "A Software Engineer",
+		"data": books,
 	})
 }
-func (h *bookHandler) HelloHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"title":    "Hello World!",
-		"subtitle": "Golang_WEBAPP",
-	})
-}
-func (h *bookHandler) BooksHandler(c *gin.Context) {
-	id := c.Param("id")
-	title := c.Param("title")
-
-	c.JSON(http.StatusOK, gin.H{"id": id, "title": title})
-}
-
-func (h *bookHandler) QueryHandler(c *gin.Context) {
-	title := c.Query("title")
-	price := c.Query("price")
-
-	c.JSON(http.StatusOK, gin.H{"title": title, "price": price})
-}
-
 func (h *bookHandler) PostBooksHandler(c *gin.Context) {
 	var bookRequest book.BookRequest
 
