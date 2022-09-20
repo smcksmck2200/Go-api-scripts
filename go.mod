@@ -1,4 +1,4 @@
-module GOLANG_WEBAPP
+module Go-API
 
 go 1.19
 

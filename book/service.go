@@ -17,7 +17,6 @@ func NewService(repository Repository) *service {
 func (s *service) FindAll() ([]Book, error) {
 	books, err := s.repository.FindAll()
 	return books, err
-
 }
 func (s *service) FindByID(ID int) (Book, error) {
 	book, err := s.repository.FindByID(ID)
@@ -27,7 +26,6 @@ func (s *service) Create(bookRequest BookRequest) (Book, error) {
 	price, _ := bookRequest.Price.Int64()
 	rating, _ := bookRequest.Rating.Int64()
 	discount, _ := bookRequest.Discount.Int64()
-
 	book := Book{
 		Title:       bookRequest.Title,
 		Price:       int(price),
@@ -40,7 +38,6 @@ func (s *service) Create(bookRequest BookRequest) (Book, error) {
 }
 func (s *service) Update(ID int, bookRequest BookRequest) (Book, error) {
 	book, _ := s.repository.FindByID(ID)
-
 	price, _ := bookRequest.Price.Int64()
 	rating, _ := bookRequest.Rating.Int64()
 	discount, _ := bookRequest.Discount.Int64()

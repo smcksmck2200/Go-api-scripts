@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"GOLANG_WEBAPP/book"
+	"Go-API/book"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -27,12 +27,10 @@ func (h *bookHandler) GetBooks(c *gin.Context) {
 		return
 	}
 	var booksResponse []book.BookResponse
-
 	for _, b := range books {
 		bookResponse := convertToBookResponse(b)
 		booksResponse = append(booksResponse, bookResponse)
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"data": booksResponse,
 	})
@@ -41,7 +39,6 @@ func (h *bookHandler) GetBook(c *gin.Context) {
 	idString := c.Param("id")
 	id, _ := strconv.Atoi(idString)
 	b, err := h.bookService.FindByID(int(id))
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errors": err,
@@ -55,10 +52,8 @@ func (h *bookHandler) GetBook(c *gin.Context) {
 }
 func (h *bookHandler) CreateBook(c *gin.Context) {
 	var bookRequest book.BookRequest
-
 	err := c.ShouldBindJSON(&bookRequest)
 	if err != nil {
-
 		errorMessages := []string{}
 		for _, e := range err.(validator.ValidationErrors) {
 			errorMessage := fmt.Sprintf("Error on Field: %s, condition: %s", e.Field(), e.ActualTag())
@@ -76,17 +71,14 @@ func (h *bookHandler) CreateBook(c *gin.Context) {
 		})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"data": convertToBookResponse(book),
 	})
 }
 func (h *bookHandler) UpdateBook(c *gin.Context) {
 	var bookRequest book.BookRequest
-
 	err := c.ShouldBindJSON(&bookRequest)
 	if err != nil {
-
 		errorMessages := []string{}
 		for _, e := range err.(validator.ValidationErrors) {
 			errorMessage := fmt.Sprintf("Error on Field: %s, condition: %s", e.Field(), e.ActualTag())
@@ -106,7 +98,6 @@ func (h *bookHandler) UpdateBook(c *gin.Context) {
 		})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{
 		"data": convertToBookResponse(book),
 	})
@@ -115,7 +106,6 @@ func (h *bookHandler) DeleteBook(c *gin.Context) {
 	idString := c.Param("id")
 	id, _ := strconv.Atoi(idString)
 	b, err := h.bookService.Delete(int(id))
-
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"errors": err,

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"GOLANG_WEBAPP/book"
-	"GOLANG_WEBAPP/handler"
+	"Go-API/book"
+	"Go-API/handler"
 	"fmt"
 	"log"
 
@@ -18,17 +18,12 @@ func main() {
 		log.Fatal("db connection error")
 	}
 	fmt.Println("Successfully connected!")
-
 	db.AutoMigrate(&book.Book{})
 
 	bookRepository := book.NewRepository(db)
-
 	bookService := book.NewService(bookRepository)
-
 	bookHandler := handler.NewBookHandler(bookService)
-
 	router := gin.Default()
-
 	v1 := router.Group("/v1")
 
 	v1.GET("/books", bookHandler.GetBooks)
