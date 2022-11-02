@@ -1,5 +1,10 @@
 # dependencies
 /node_modules
-
+# ignore all logs
+*.log
+# ignore config files
+/config.go
 # misc
 .DS_Store
+
+

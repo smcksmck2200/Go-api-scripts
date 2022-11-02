@@ -4,20 +4,22 @@ import (
 	"Go-API/book"
 	"Go-API/handler"
 	"fmt"
-	"log"
-
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 )
 
 func main() {
-	dsn := "host=localhost user=postgres password=password1 dbname=postgres port=5433 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
+
+	db, err := gorm.Open(postgres.Open(psqlInfo), &gorm.Config{})
 	if err != nil {
 		log.Fatal("db connection error")
 	}
+
 	fmt.Println("Successfully connected!")
+
 	db.AutoMigrate(&book.Book{})
 
 	bookRepository := book.NewRepository(db)
@@ -32,6 +34,7 @@ func main() {
 	v1.PUT("/books/:id", bookHandler.UpdateBook)
 	v1.DELETE("/books/:id", bookHandler.DeleteBook)
 	router.Run()
+
 }
 
 //main
